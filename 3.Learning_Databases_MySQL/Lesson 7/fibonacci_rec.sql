@@ -1,0 +1,18 @@
+DROP FUNCTION IF EXISTS FIBONACCI;
+DELIMITER //
+CREATE FUNCTION FIBONACCI(num INT)
+RETURNS INT NOT DETERMINISTIC
+BEGIN
+  DECLARE fib_1, fib_2, fib INT;
+  IF num <=0 THEN
+    SET fib = 0;
+  ELSEIF num = 1 OR num = 2 THEN
+    SET fib = 1;
+  ELSE
+    SET fib_1 = FIBONACCI(num-1);
+    SET fib_2 = FIBONACCI(num-2);
+    SET fib = (fib_1 + fib_2);    
+  END IF;
+  RETURN fib;
+END//
+DELIMITER ;

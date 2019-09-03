@@ -1,0 +1,102 @@
+1 задание:
+если у нас может быть более одной строки с пустым наименованием,
+то от поля unique_name придется избавиться,
+поскольку уникальность по первым 10 символам имени уже не будет соблюдена
+
+DROP TABLE IF EXISTS catalogs;
+CREATE TABLE catalogs (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) COMMENT 'Название раздела'
+  /*UNIQUE unique_name(name(10))*/
+) COMMENT = 'Разделы интернет-магазина';
+
+INSERT IGNORE INTO catalogs VALUES
+  (DEFAULT, 'processors'),
+  (DEFAULT, 'motherboards'),
+  (DEFAULT, 'videocards'),
+  (DEFAULT, ''),
+  (DEFAULT, NULL);
+ 
+ UPDATE catalogs set name = 'empty' WHERE name = '' OR name is NULL;
+
+ SELECT * from catalogs;
+ 
+результат:
+
+id|name        |
+--|------------|
+ 1|processors  |
+ 2|motherboards|
+ 3|videocards  |
+ 4|empty       |
+ 5|empty       |
+ 
+2 задание:
+DROP TABLE IF EXISTS users;
+CREATE TABLE users (
+	id SERIAL PRIMARY KEY,
+	name VARCHAR(255) COMMENT 'Имя пользователя',
+	login VARCHAR(50) COMMENT 'Логин',
+	pass VARCHAR(50) COMMENT 'Пароль'
+) 	COMMENT = 'Список пользователей хранилища';
+
+DROP TABLE IF EXISTS content_type;
+CREATE TABLE content_type (
+	id SERIAL PRIMARY KEY,
+	content VARCHAR(255) COMMENT 'Тип файла'
+) COMMENT 'Разновидности медиафайлов';
+
+DROP TABLE IF EXISTS storage;
+CREATE TABLE storage (
+	id SERIAL PRIMARY KEY,
+	storage VARCHAR(50) COMMENT 'Вид хранилища'
+) COMMENT 'Виды хранилищ файлов';
+
+DROP TABLE IF EXISTS mediafiles;
+CREATE TABLE mediafiles (
+	id SERIAL PRIMARY KEY,
+	id_content_type INT UNSIGNED COMMENT 'Идентификатор типа файлов',
+	id_user INT UNSIGNED COMMENT 'Идентификатор пользователя',
+	name VARCHAR(255) COMMENT 'Наименование файла',
+	keywords VARCHAR(255) COMMENT 'Список ключевых слов',
+	KEY index_mediafile(id)
+) COMMENT 'Данные о медиафайлах';
+
+DROP TABLE IF EXISTS file_actions;
+CREATE TABLE file_actions (
+	id SERIAL PRIMARY KEY,
+	id_file INT UNSIGNED COMMENT 'Идентификатор медиафайла',
+	id_storage INT UNSIGNED COMMENT 'Идентификатор хранилища',
+	directory VARCHAR(255) COMMENT 'Путь файла в хранилище',
+	create_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Время создания файла',
+	modify_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Время модификации файла',
+	KEY index_mediafile(id_file),
+	KEY index_action(id)
+) COMMENT 'Действия с файлами';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+

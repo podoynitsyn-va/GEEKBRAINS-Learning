@@ -1,0 +1,17 @@
+2019-06-14 22:17:31.136186: copy file new_file.txt to file new_file2.txt
+2019-06-14 22:17:38.279813: copy file new_file.txt to file new_file3.txt
+2019-06-14 22:18:46.774220: copy file new_file.txt to file new_file3.txt
+2019-06-14 23:27:50.089910: folder new_folder is created
+2019-06-14 23:30:16.509887: file new_file.txt is created
+2019-06-14 23:38:32.580570: file 111.txt is created
+2019-06-14 23:44:47.522641: file new_file.txt is created
+2019-06-14 23:56:56.185769: folder newnew is created
+2019-06-15 00:03:31.739941: file 111.txt is created
+2019-06-15 00:04:11.655984: file 111.txt is created
+2019-06-15 00:04:31.671828: file 111.txt is created
+2019-06-15 00:04:56.456316: file 111.txt is created
+2019-06-15 00:16:54.898342: folder new_folder2 is created
+2019-06-15 00:17:22.217468: file new_file.txt is deleted
+2019-06-15 00:17:28.039565: file new_file2.txt is deleted
+2019-06-15 00:17:31.362600: file new_file3.txt is deleted
+2019-06-15 01:12:09.391400: folder new_folder2 is created

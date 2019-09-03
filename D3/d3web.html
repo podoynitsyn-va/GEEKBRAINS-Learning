@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+	<head>
+    	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+ 		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    	
+    	<title>D3</title>
+    	
+ 
+    	<style>
+    		body {
+    			position: relative;
+    			width: 100%;
+    			height: 100%;
+    			background: white;
+    			margin: 0;
+    			padding: 0;
+    		}
+    		svg {
+    			position: fixed;
+    			top: 0;
+    			width: 100%;
+    			height: 100%;
+    		}
+
+    		circle {
+    			fill: orange;
+    			stroke: white;
+    		}
+			line {
+				stroke: #fff;
+				stroke-width:1.5;
+			}
+
+    	</style>
+	</head>
+	
+	<body>
+	 	<svg>
+	 		<!--circle r='50' cx='100' cy='100'></circle-->
+	 	</svg>
+	</body>
+	<script type="text/javascript">
+
+		var svg = d3.select('svg');
+
+		var web = d3.layout.force()
+			.linkStrength(1.0)
+			.friction(.9)
+			.linkDistance(-20)
+			.charge(-100)
+			.gravity(.005)
+			.theta(0.8)
+			.alpha(0.1)
+			.on("tick", tick);
+
+		var webLinks = [];
+
+		var underlay = svg.append("g");
+
+		var rect = underlay.selectAll("rect").data([1]);
+
+		rect.enter().append("rect").style("fill","#454545");
+
+		var depth = 7;
+		var segments = 20;
+		var n = segments * depth; //число точек спирали
+		var rSmall = 5;
+		var radius;
+
+		var step = (2 * Math.PI) / segments;
+
+		var points = d3.range(n); //массив из пустых 20 значений [0..19]
+
+		var webParticles = [];
+
+		var height = window.innerHeight;
+		var width = window.innerWidth;
+
+		web.size([width, height]);
+
+		rect.attr("width", width)
+			.attr("height", height);
+
+		radius = Math.min(width,height) / 2 - 10;
+
+		var origin = {
+			x: width / 2,
+			y: height / 2
+			};
+
+		var radiusStep = radius / n ;
+
+		points.forEach(function(p, i){
+
+			var angle = i * step;
+			var schrinkingRadius = radius - i * radiusStep;
+
+			webParticles.push({x: origin.x + schrinkingRadius * Math.cos(angle), y: origin.y + schrinkingRadius * Math.sin(angle)});
+
+			if (i < points.length - 1 && i + 1 !== points.length -1)
+				webLinks.push({
+					source: i,
+					target: i + 1
+				});
+
+			var off = i + segments;
+
+			if (off < n - 1)
+				webLinks.push({
+					source: i,
+					target: off
+				});
+			else
+				webLinks.push({
+					source: i,
+					target: n-1
+				});
+		});
+
+		var drag = web.drag();
+
+		var svgWebLinks = underlay.selectAll("line").data(webLinks);
+
+		svgWebLinks.enter().append("line");
+
+		var circles = svg.selectAll("circle").data(webParticles);
+
+		circles.enter().append("circle")
+			.attr("r", rSmall)
+			.style("fill", "orange")
+			.call(drag);	
+
+		web.nodes(webParticles)
+			.links(webLinks)
+			.start();
+
+		function tick(){
+			svgWebLinks.attr('x1', function(d){return d.source.x})
+				.attr('y1', function(d){return d.source.y})
+				.attr('x2', function(d){return d.target.x})
+				.attr('y2', function(d){return d.target.y});
+
+			circles.attr("cx", function(d){return d.x})
+				.attr("cy", function(d){return d.y});
+
+		}
+
+	</script>
+ 
+</html>
